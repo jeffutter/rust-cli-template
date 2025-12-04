@@ -1,14 +1,14 @@
-name: CD # Continuous Deployment
+noame: CD # Continuous Deployment
 
 on:
   push:
     tags:
-      - '[v]?[0-9]+.[0-9]+.[0-9]+'
+      - "[v]?[0-9]+.[0-9]+.[0-9]+"
 
 jobs:
   publish:
     name: Publishing for {{ "${{ matrix.job.os }}" }}
-    runs-on: {{ "${{ matrix.job.os }}" }}
+    runs-on: { { "${{ matrix.job.os }}" } }
     strategy:
       matrix:
         rust: [stable]
@@ -53,15 +53,11 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-      - name: Install Protoc
-        uses: arduino/setup-protoc@v3
-        with:
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
       - name: Install Rust toolchain
         uses: actions-rs/toolchain@v1
         with:
-          toolchain: {{ "${{ matrix.rust }}" }}
-          target: {{ "${{ matrix.job.target }}" }}
+          toolchain: { { "${{ matrix.rust }}" } }
+          target: { { "${{ matrix.job.target }}" } }
           profile: minimal
           override: true
       - uses: Swatinem/rust-cache@v2
@@ -69,8 +65,8 @@ jobs:
         uses: actions-rs/cargo@v1
         with:
           command: build
-          use-cross: {{ "${{ matrix.job.use-cross }}" }}
-          toolchain: {{ "${{ matrix.rust }}" }}
+          use-cross: { { "${{ matrix.job.use-cross }}" } }
+          toolchain: { { "${{ matrix.rust }}" } }
           args: --release --target {{ "${{ matrix.job.target }}" }}
 
       - name: install strip command
@@ -111,4 +107,4 @@ jobs:
             target/{{ "${{ matrix.job.target }}" }}/release/{{project-name}}-*.tar.gz
             target/{{ "${{ matrix.job.target }}" }}/release/{{project-name}}-*.sha256
         env:
-          GITHUB_TOKEN: {{ "${{ secrets.GITHUB_TOKEN }}" }}
+          GITHUB_TOKEN: { { "${{ secrets.GITHUB_TOKEN }}" } }
