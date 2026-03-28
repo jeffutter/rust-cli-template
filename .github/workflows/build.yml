@@ -12,7 +12,7 @@ jobs:
       PROJECT_NAME: rust-grpc-template
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
       - name: Run cargo generate
         uses: cargo-generate/cargo-generate-action@v0.18.5
         with:
